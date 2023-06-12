@@ -1,0 +1,1 @@
+console.log('%cEDABK', 'font-size: 100px; color: green');
