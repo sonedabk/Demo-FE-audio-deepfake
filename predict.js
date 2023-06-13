@@ -50,13 +50,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
       try {
         console.log(serverDomain.value);
-        let res = await fetch(`${serverDomain.value}/predict`, {
-          method: "POST",
-          // headers: {
-          //     "Content-Type": "multipart/form-data"
-          // },
-          body: formData,
-        });
+        let res = await fetch(
+          `${
+            serverDomain.value || "https://e609-202-191-58-174.ngrok-free.app"
+          }/predict`,
+          {
+            method: "POST",
+            // headers: {
+            //     "Content-Type": "multipart/form-data"
+            // },
+            body: formData,
+          }
+        );
         res = await res.json();
 
         if (res?.code === 200) {
@@ -73,7 +78,7 @@ document.addEventListener("DOMContentLoaded", () => {
         let toastBody = document.querySelector(".toast-body");
         toastBody.innerHTML = error?.message || error?.data;
         toastBootstrap.show();
-        hiddenLoading()
+        hiddenLoading();
       }
     } else {
       alert("Please upload audio file or record");
