@@ -21,6 +21,8 @@ document.addEventListener("DOMContentLoaded", () => {
       e.style.display = "inline-block";
     }
     loading.style.display = "inline-block";
+    fakeVal.innerHTML = "";
+    realVal.innerHTML = "";
   }
 
   function hiddenLoading() {
