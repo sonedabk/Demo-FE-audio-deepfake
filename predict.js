@@ -73,6 +73,7 @@ document.addEventListener("DOMContentLoaded", () => {
         let toastBody = document.querySelector(".toast-body");
         toastBody.innerHTML = error?.message || error?.data;
         toastBootstrap.show();
+        hiddenLoading()
       }
     } else {
       alert("Please upload audio file or record");
