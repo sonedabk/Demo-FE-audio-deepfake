@@ -12,6 +12,10 @@ document.addEventListener("DOMContentLoaded", () => {
   let fakeVal = document.querySelector(".value-fake");
   let realVal = document.querySelector(".value-real");
 
+  // Toast
+  const toastLiveExample = document.getElementById("liveToast");
+  const toastBootstrap = bootstrap.Toast.getOrCreateInstance(toastLiveExample);
+
   function displayLoading() {
     for (let e of placeholder) {
       e.style.display = "inline-block";
@@ -66,6 +70,9 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       } catch (error) {
         console.log("ERROR", error);
+        let toastBody = document.querySelector(".toast-body");
+        toastBody.innerHTML = error?.message || error?.data;
+        toastBootstrap.show();
       }
     } else {
       alert("Please upload audio file or record");
