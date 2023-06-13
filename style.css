@@ -62,3 +62,15 @@ table {
 
     padding: 12px;
 }
+
+.title {
+	font-size: 24px;
+	display: inline-block;
+	width: 48px;
+}
+
+.pred-value {
+	font-size: 32px;
+	font-weight: 700;
+	margin-left: 24px;
+}
