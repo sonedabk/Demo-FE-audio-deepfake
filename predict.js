@@ -41,47 +41,62 @@ document.addEventListener("DOMContentLoaded", () => {
   upload.addEventListener("change", (e) => {
     let file = upload.files[0];
     playerRef.src = window.URL.createObjectURL(file);
+    window.isRecord = false;
+    window.recordFile = null;
   });
 
-  predictBtn.addEventListener("click", async () => {
-    if (upload.files?.[0]) {
-      displayLoading();
+  async function makingPrediction(file) {
+    try {
+      console.log("UPLOAD FILE", file);
       const formData = new FormData();
-      const file = upload.files?.[0];
       formData.append("file", file);
 
-      try {
-        console.log(serverDomain.value);
-        let res = await fetch(
-          `${
-            serverDomain.value || "https://e609-202-191-58-174.ngrok-free.app"
-          }/predict`,
-          {
-            method: "POST",
-            // headers: {
-            //     "Content-Type": "multipart/form-data"
-            // },
-            body: formData,
-          }
-        );
-        res = await res.json();
-
-        if (res?.code === 200) {
-          fakeVal.innerHTML = res?.data?.Fake;
-          realVal.innerHTML = res?.data?.Real;
-          hiddenLoading();
-        } else {
-          throw new Error(
-            res?.message || res?.data || "Smt wrong 've been occured!"
-          );
+      let res = await fetch(
+        `${
+          serverDomain.value || "https://e609-202-191-58-174.ngrok-free.app"
+        }/predict`,
+        {
+          method: "POST",
+          // headers: {
+          //     "Content-Type": "multipart/form-data"
+          // },
+          body: formData,
         }
-      } catch (error) {
-        console.log("ERROR", error);
-        let toastBody = document.querySelector(".toast-body");
-        toastBody.innerHTML = error?.message || error?.data;
-        toastBootstrap.show();
+      );
+      res = await res.json();
+
+      if (res?.code === 200) {
+        fakeVal.innerHTML = res?.data?.Fake;
+        realVal.innerHTML = res?.data?.Real;
         hiddenLoading();
+      } else {
+        throw new Error(
+          res?.message || res?.data || "Smt wrong 've been occured!"
+        );
       }
+    } catch (error) {
+      console.log("ERROR", error);
+      let toastBody = document.querySelector(".toast-body");
+      toastBody.innerHTML = error?.message || error?.data;
+      toastBootstrap.show();
+      hiddenLoading();
+    }
+  }
+
+  predictBtn.addEventListener("click", async () => {
+    if (window.isRecord) {
+      displayLoading();
+      // console.log(window.recordFile, "RECORD BLOB");
+      // let blobRes = await fetch(playerRef.src, {});
+      // blobRes = await blobRes.blob();
+      let blobRes = window.recordFile;
+      console.log(blobRes)
+      let file = new File([blobRes], "filename.wav", { type: blobRes.type });
+      makingPrediction(file);
+    } else if (upload.files?.[0]) {
+      displayLoading();
+      const file = upload.files?.[0];
+      makingPrediction(file);
     } else {
       alert("Please upload audio file or record");
     }
